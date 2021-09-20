@@ -1,7 +1,8 @@
 // const strapiBaseUri = process.env.API_URL || 'http://localhost:1337'
 // const environment = (process.env.NODE_ENV || 'development').trim()
 const strapiBaseUri = process.env.API_URL
-const environment = process.env.NODE_ENV
+// const environment = process.env.NODE_ENV
+const environment = 'development'
 
 export default {
   // Target (https://go.nuxtjs.dev/config-target)
