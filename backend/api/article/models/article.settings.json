@@ -14,15 +14,18 @@
   "attributes": {
     "title": {
       "type": "string",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "description": {
       "type": "text",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "content": {
       "type": "richtext",
-      "required": true
+      "required": true,
+      "pluginOptions": {}
     },
     "slug": {
       "type": "uid",
@@ -30,8 +33,8 @@
       "required": true
     },
     "category": {
-      "model": "category",
-      "via": "articles"
+      "via": "articles",
+      "model": "category"
     },
     "image": {
       "model": "file",
@@ -48,6 +51,11 @@
     "author": {
       "via": "articles",
       "model": "writer"
+    },
+    "seo": {
+      "type": "component",
+      "repeatable": true,
+      "component": "shared.seo"
     }
   }
 }

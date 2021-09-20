@@ -7,12 +7,28 @@
   "parserOptions": {
     "parser": "babel-eslint"
   },
-  "extends": [
-    "eslint:recommended",
-    "plugin:vue/recommended",
-    "plugin:prettier/recommended",
-    "prettier/vue"
-  ],
+  "extends": ["eslint:recommended", "plugin:vue/recommended"],
   "plugins": ["vue"],
-  "rules": {}
+  "rules": {
+    "comma-dangle": ["error", "never"],
+    "indent": ["error", 2],
+    "object-curly-spacing": ["error", "always"],
+    "no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1,
+        "maxEOF": 1
+      }
+    ],
+    "no-var": "error",
+    "quotes": ["error", "single"],
+    "semi": [2, "never"],
+    "semi-spacing": [
+      2,
+      {
+        "before": false,
+        "after": true
+      }
+    ]
+  }
 }

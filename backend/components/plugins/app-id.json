@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_app_id_app_ids",
+  "info": {
+    "name": "AppID",
+    "icon": "atom"
+  },
+  "options": {},
+  "attributes": {
+    "fb_app_id": {
+      "type": "string"
+    },
+    "zalo_app_id": {
+      "type": "string"
+    }
+  }
+}

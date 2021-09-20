@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_site_site_configs",
+  "info": {
+    "name": "site_config",
+    "icon": "cogs",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "domain": {
+      "type": "string"
+    },
+    "ssl": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

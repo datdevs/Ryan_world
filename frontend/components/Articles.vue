@@ -1,49 +1,34 @@
 <template>
-  <div>
-    <div class="uk-child-width-1-2" uk-grid>
-      <div>
-        <ArticleCard
-          v-for="article in leftArticles"
-          :key="article.id"
-          :article="article"
-        />
-      </div>
-      <div>
-        <div class="uk-child-width-1-2@m uk-grid-match" uk-grid>
-          <ArticleCard
-            v-for="article in rightArticles"
-            :key="article.id"
-            :article="article"
-          />
-        </div>
-      </div>
+  <div class="container mx-auto my-10">
+    <div class="grid grid-cols-3 gap-6">
+      <ArticleCard
+        v-for="(article, index) in articles"
+        :key="`article_${article.id}`"
+        :article="article"
+        :index="index"
+      />
     </div>
+    <Pagination
+      class="my-16"
+      :page="pagination.current"
+      :size="pagination.size"
+      :total="pagination.total"
+      data-aos="fade-up"
+    />
   </div>
 </template>
 
 <script>
-import ArticleCard from "./ArticleCard";
-
 export default {
-  components: {
-    ArticleCard,
-  },
   props: {
     articles: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
-  },
-  computed: {
-    leftArticlesCount() {
-      return Math.ceil(this.articles.length / 5);
-    },
-    leftArticles() {
-      return this.articles.slice(0, this.leftArticlesCount);
-    },
-    rightArticles() {
-      return this.articles.slice(this.leftArticlesCount, this.articles.length);
-    },
-  },
-};
+    pagination: {
+      type: Object,
+      default: () => {}
+    }
+  }
+}
 </script>

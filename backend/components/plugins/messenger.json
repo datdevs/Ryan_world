@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_plugins_messengers",
+  "info": {
+    "name": "messenger",
+    "icon": "comment-dots"
+  },
+  "options": {},
+  "attributes": {
+    "out_greeting": {
+      "type": "string"
+    },
+    "page_id": {
+      "type": "string",
+      "required": true
+    },
+    "color": {
+      "type": "string"
+    },
+    "in_greeting": {
+      "type": "string"
+    }
+  }
+}

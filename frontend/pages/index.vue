@@ -1,51 +1,76 @@
 <template>
   <div>
-    <div class="uk-section">
-      <div class="uk-container uk-container-large">
-        <h1>{{ homepage.hero.title }}</h1>
-        <Articles :articles="articles" />
-      </div>
-    </div>
+    <Banner />
+    <Articles
+      :articles="articles || []"
+      :pagination="page"
+    />
   </div>
 </template>
 
 <script>
-import Articles from "../components/Articles";
-import { getMetaTags } from "../utils/seo";
-import { getStrapiMedia } from "../utils/medias";
+import { getMetaTags } from '@/utils/seo'
+import { getStrapiMedia } from '@/utils/medias'
 
 export default {
-  components: {
-    Articles,
-  },
-  async asyncData({ $strapi }) {
+  async asyncData({ $strapi, query }) {
+    const page = {
+      current: parseInt(query.page, 10) || 1,
+      size: 9,
+      total: await $strapi.count('articles')
+    }
     return {
-      articles: await $strapi.find("articles"),
-      homepage: await $strapi.find("homepage"),
-      global: await $strapi.find("global"),
-    };
+      articles: await $strapi.find('articles', {
+        _sort: 'created_at:desc',
+        _start: (page.current - 1) * page.size,
+        _limit: page.size
+      }),
+      homepage: await $strapi.find('homepage'),
+      global: await $strapi.find('global'),
+      page
+    }
   },
   head() {
-    const { seo } = this.homepage;
-    const { defaultSeo, favicon, siteName } = this.global;
+    const { seo } = this.homepage
+    const { defaultSeo, favicon, siteName } = this.global
 
     // Merge default and article-specific SEO data
     const fullSeo = {
       ...defaultSeo,
-      ...seo,
-    };
+      ...seo
+    }
 
     return {
       titleTemplate: `%s | ${siteName}`,
-      title: fullSeo.metaTitle,
+      title: this.homepage.hero.title,
       meta: getMetaTags(fullSeo),
       link: [
         {
-          rel: "favicon",
-          href: getStrapiMedia(favicon.url),
-        },
-      ],
-    };
+          rel: 'favicon',
+          href: getStrapiMedia(favicon.url)
+        }
+      ]
+    }
   },
-};
+  watch: {
+    '$route.query': 'fetchData'
+  },
+  updated() {
+    window.scrollTo(0, 0)
+  },
+  methods: {
+    async fetchData() {
+      this.page = {
+        current: parseInt(this.$route.query.page, 10) || 1,
+        size: 9,
+        total: await this.$strapi.count('articles')
+      }
+      this.articles = await this.$strapi.find('articles', {
+        _sort: 'created_at:desc',
+        _start: (this.page.current - 1) * this.page.size,
+        _limit: this.page.size
+      })
+    }
+  }
+}
 </script>

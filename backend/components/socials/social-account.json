@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_socials_social_accounts",
+  "info": {
+    "name": "socialAccount",
+    "icon": "rss",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "github": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    }
+  }
+}

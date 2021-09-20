@@ -1,85 +1,59 @@
 <template>
-  <div>
-    <nav class="uk-navbar-container" uk-navbar>
-      <div class="uk-navbar-left">
-        <ul class="uk-navbar-nav">
-          <li>
-            <a href="#modal-full" uk-toggle><span uk-icon="icon: table" /></a>
-          </li>
-          <li>
-            <nuxt-link to="/" tag="a">Strapi Blog</nuxt-link>
-          </li>
-        </ul>
-      </div>
-
-      <div class="uk-navbar-right">
-        <ul class="uk-navbar-nav">
-          <li v-for="category in categories" :key="category.id">
-            <nuxt-link
-              :to="{ name: 'categories-slug', params: { slug: category.slug } }"
-              tag="a"
-            >
-              {{ category.name }}
-            </nuxt-link>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <div id="modal-full" class="uk-modal-full" uk-modal>
-      <div class="uk-modal-dialog">
-        <button
-          class="uk-modal-close-full uk-close-large"
-          type="button"
-          uk-close
-        />
-        <div
-          class="uk-grid-collapse uk-child-width-1-2@s uk-flex-middle"
-          uk-grid
-        >
-          <div
-            class="uk-background-cover"
-            style="
-              background-image: url('https://images.unsplash.com/photo-1493612276216-ee3925520721?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3308&q=80 3308w');
-            "
-            uk-height-viewport
-          />
-          <div class="uk-padding-large">
-            <h1 style="font-family: Staatliches">Strapi blog</h1>
-            <div class="uk-width-1-2@s">
-              <ul class="uk-nav-primary uk-nav-parent-icon" uk-nav>
-                <li v-for="category in categories" :key="category.id">
-                  <nuxt-link
-                    class="uk-modal-close"
-                    :to="{
-                      name: 'categories-slug',
-                      params: { slug: category.slug },
-                    }"
-                    tag="a"
-                  >
-                    {{ category.name }}
-                  </nuxt-link>
-                </li>
-              </ul>
-            </div>
-            <p class="uk-text-light">Built with strapi</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nuxt />
+  <div class="bg-white dark:bg-gray-900">
+    <Header
+      :logo="logo"
+      :pagetitle="global.siteName"
+    >
+      <nav-menu :categories="categories" />
+      <search-bar />
+      <switch-mode />
+    </Header>
+    <nuxt keep-alive />
+    <Footer :settings="global" />
   </div>
 </template>
 
 <script>
+import { getStrapiMedia } from '../utils/medias'
+import { websiteURL } from '@/utils/filters'
+
 export default {
-  async fetch() {
-    this.categories = await this.$strapi.find("categories");
+  filters: {
+    websiteURL
   },
-  data: function () {
+  data() {
     return {
-      categories: [],
-    };
+      global: null,
+      logo: null,
+      categories: []
+    }
   },
-};
+  async fetch() {
+    this.categories = await this.$strapi.find('categories')
+    const global = await this.$strapi.find('global')
+    this.global = global
+    this.logo = getStrapiMedia(global.logo.url)
+  },
+  jsonld() {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      url: websiteURL(this.global.site_config.domain, this.global.site_config.ssl),
+      name: this.global.siteName,
+      logo: {
+        '@id': this.logo
+      }
+    }
+  },
+  mounted() {
+    if (this.global.app_id && this.global.app_id.fb_app_id) {
+      const fb_app_id = this.global.app_id.fb_app_id;
+      (async () => {
+        const { integrateFacebookSDK, initFacebookSDK } = await import('../utils/init.js')
+        integrateFacebookSDK(document, 'script', 'facebook-jssdk')
+        initFacebookSDK(fb_app_id)
+      })()
+    }
+  }
+}
 </script>

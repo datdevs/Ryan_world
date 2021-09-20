@@ -1,0 +1,13 @@
+{
+  "collectionName": "components_plugins_analytics",
+  "info": {
+    "name": "analytics",
+    "icon": "poll"
+  },
+  "options": {},
+  "attributes": {
+    "google_tracking_id": {
+      "type": "string"
+    }
+  }
+}
